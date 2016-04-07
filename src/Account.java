@@ -4,8 +4,8 @@ public class Account {
 	private int accountId;
 	private String name;
 	private static int id = 1;
-	
-	public Account(String name){
+
+	public Account(String name) {
 		this.accountId = id++;
 		setName(name);
 	}
@@ -14,20 +14,20 @@ public class Account {
 		return accountId;
 	}
 
-//	public void setAccountId(int accountId) {
-//		this.accountId = accountId;
-//	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		if (name.equals("")) {
+			this.name = "Account " + this.getAccountId();
+		} else {
+			this.name = name;
+		}
 	}
-	
-	public void printInfo(){
-		System.out.printf("%d\t%s\n", this.accountId, getName());
+
+	public void printInfo() {
+		System.out.printf("%d - Name: %s\n", this.accountId, getName());
 	}
-	
+
 }

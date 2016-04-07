@@ -9,12 +9,25 @@ public class VideoCassette {
 	private int takenBy = 0;
 	private static int id = 1;
 
+	public VideoCassette(String title) {
+		this.cassetteId = id++;
+		setTitle(title);
+	}
+
 	public String getTitle() {
 		return title;
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		if (title.equals("")) {
+			this.title = "Video cassette " + this.getCassetteId();
+		} else {
+			this.title = title;
+		}
+	}
+
+	public int getCassetteId() {
+		return cassetteId;
 	}
 
 	public LocalDate getTakenOn() {
@@ -29,47 +42,73 @@ public class VideoCassette {
 		return takenTo;
 	}
 
+	public int getTakenBy() {
+		return takenBy;
+	}
+
 	public void setTakenTo(LocalDate takenTo) {
 		this.takenTo = takenTo;
 	}
 
-	public VideoCassette(String title) {
-		this.cassetteId = id++;
-		this.title = title;
+	public boolean isReturned() {
+		if (this.takenOn == null) {
+			return true;
+		}
+
+		return false;
 	}
 
-	public void getVideoCassette(Account acc) {
+	public VideoCassette getVideoCassette(Account acc) {
 		this.takenBy = acc.getAccountId();
 		setTakenOn(LocalDate.now());
 		setTakenTo(this.takenOn.plusDays(3));
+
+		return this;
 	}
 
-	public void returnVideoCassette(Account acc) {
-		if (this.takenBy == acc.getAccountId()) {
-			this.takenBy = 0;
-			this.takenOn = null;
-			this.takenTo = null;
+	public VideoCassette returnVideoCassette(Account acc) {
+		if (this.isReturned()) {
+			System.out.println("The video cassette is not taken");
+		} else {
+
+			if (this.takenBy == acc.getAccountId()) {
+				this.takenBy = 0;
+				this.takenOn = null;
+				this.takenTo = null;
+			} else {
+				System.out.println("This account is not take that video cassette");
+			}
 		}
+		return this;
 	}
 
 	public void printInfo() {
 		String takenOn = "";
 		String takenTo = "";
 		String takenBy = "";
-		
+
 		if (this.takenOn != null) {
 			takenOn = this.getTakenOn().toString();
 			takenTo = this.getTakenTo().toString();
 			takenBy = "" + this.takenBy;
-		}else{
-			takenOn = "";
-			takenTo = "";
-			takenBy = "";
 		}
 
-		System.out.printf("ID\tTitle\t\t\tTaken On\tTaken To\tTaken By\n");
-		System.out.println("____________________________________________________________________________");
-		System.out.printf("%d\t%s\t\t%s\t%s\t%s\n", this.cassetteId, getTitle(), takenOn, takenTo, takenBy);
+		System.out.printf("%d - Title: %s, Taken On: %s, Taken To: %s\n", this.cassetteId, getTitle(), takenOn,
+				takenTo);
 	}
 
+	public void printInfoWithAccountId() {
+		String takenOn = "";
+		String takenTo = "";
+		String takenBy = "";
+
+		if (this.takenOn != null) {
+			takenOn = this.getTakenOn().toString();
+			takenTo = this.getTakenTo().toString();
+			takenBy = "" + this.takenBy;
+		}
+
+		System.out.printf("%d - Title: %s, Taken On: %s, Taken To: %s, Taken By: %s\n", this.cassetteId, getTitle(),
+				takenOn, takenTo, takenBy);
+	}
 }
